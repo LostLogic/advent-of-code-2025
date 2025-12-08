@@ -57,5 +57,4 @@ foreach($entry in $freshIdRanges)
 # Third  try: 336495597913099 - Too high
 # Fourth try: 336495597913098 - Just right
 
-
 Write-Host "Total fresh ingredients: $freshIds" -ForegroundColor Cyan
