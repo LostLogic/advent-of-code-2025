@@ -146,7 +146,7 @@ else
 
 for($i = 0; $i -lt $tiles.Count-1; $i++)
 {
-    $col = ($tiles[0].X -eq $tiles[1].X)
+    $col = ($tiles[$i].X -eq $tiles[$i+1].X)
     if(!$col)
     {
         # Fill between X and X+1
@@ -186,7 +186,7 @@ for($i = 0; $i -lt $tileArray.GetLength(0); $i++)
 {
     $row = for($x = 0; $x -lt $tileArray.GetLength(1); $x++) { $tileArray[$i, $x] }
 
-    $firstTile = $row.IndexOf($true)
+    $firstTile = [array]::IndexOf($row, $true)
 
     if($firstTile -eq -1)
     {
@@ -195,7 +195,7 @@ for($i = 0; $i -lt $tileArray.GetLength(0); $i++)
 
     for($j = $firstTile + 1; $j -lt $row.Count; $j++)
     {
-        if($tileArray[$i, $j] -and $row[$j..-1].IndexOf($true) -eq -1)
+        if($tileArray[$i, $j] -and [array]::IndexOf($row[($j+1)..($row.Count-1)], $true) -eq -1)
         {
             break
         }
@@ -204,8 +204,8 @@ for($i = 0; $i -lt $tileArray.GetLength(0); $i++)
     }
 }
 
-#$visualTiles = Print-Tiles -tileArray $tileArray -printToScreen $true
-#$visualTiles | Out-File "alltheTiles.txt"
+$visualTiles = Print-Tiles -tileArray $tileArray -printToScreen $false
+$visualTiles | Out-File "alltheTiles.txt"
 
 # Check the pre calculated tile area and test each
 # of the entries from largest toward smallest until
@@ -232,4 +232,6 @@ foreach($area in $tileAreaPreCalc | Sort-Object -Property Area -Descending)
     }
 }
 
-# First attempt: 3083850 - Too low
+# First attempt:     3083850 - Too low - Wrong variable set for yMax
+# Second attempt: 3004128768 - Too high - Bug in fill algo
+# Third attempt:  1473551379 - Solved
